@@ -4,8 +4,9 @@ import csv
 
 #make a class that has a name and a title
 class Person:
-    def __init__(self, name, title):
+    def __init__(self, name, last, title):
         self.name = name
+        self.last = last
         self.title = title
 
 
@@ -28,9 +29,11 @@ def main():
     people = []
 
     for child in children:
-        name = child.find('div', {'data-testid': 'gallery-item-title'}).text
+        full_name = child.find('div', {'data-testid': 'gallery-item-title'}).text
+        name = full_name.split()[0]
+        last = full_name.split()[1]
         title = child.find('p', {'data-testid': 'gallery-item-description'}).text
-        person = Person(name, title)
+        person = Person(name, last , title)
         people.append(person)
 
 
@@ -38,10 +41,10 @@ def main():
     #make a csv file with a name and title column
     with open('people.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["Name", "Title"])
+        writer.writerow(["First Name", "Last Name", "Title"])
 
         for person in people:
-            writer.writerow([person.name, person.title])
+            writer.writerow([person.name, person.last, person.title])
 
 if __name__ == "__main__":
     main()
